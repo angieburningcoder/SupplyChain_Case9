@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Same-Day Delivery 個案分工 🍕</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=VT323&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --A:#e8432f; --A-soft:#fde0da;
+  --B:#f2a900; --B-soft:#fff0c4;
+  --C:#2f9e5a; --C-soft:#d9f2e2;
+  --D:#7b5cf0; --D-soft:#e7e0ff;
+  --ink:#2b1a12; --mute:#7a6355; --cream:#fff7e8; --paper:#fffdf8;
+  --line:#ecdcc6; --cyan:#22c3e6; --pink:#ff6fb5;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);
+  font-family:"Noto Sans TC",-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;line-height:1.75;font-size:15px}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+
+/* ---------- top checker + ticker ---------- */
+.checker{height:26px;background:
+  repeating-conic-gradient(var(--A) 0 25%, #fff 0 50%) 0 0/26px 26px}
+.ticker{background:var(--ink);color:#ffe27a;font-family:"VT323",monospace;font-size:20px;white-space:nowrap;overflow:hidden;border-bottom:3px solid var(--B)}
+.ticker span{display:inline-block;padding:4px 0;animation:tick 28s linear infinite}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ---------- header ---------- */
+header{padding:36px 0 18px}
+.pill{display:inline-block;border:2px solid var(--ink);background:#fff;border-radius:999px;padding:3px 14px;font-size:13px;font-weight:700;box-shadow:3px 3px 0 var(--ink)}
+h1{font-family:"Bungee",sans-serif;font-size:44px;line-height:1.05;margin:18px 0 6px;
+  background:linear-gradient(180deg,#fff 0%,#ffd1c9 30%,var(--A) 55%,#a3180b 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  -webkit-text-stroke:2px var(--ink);letter-spacing:.5px}
+h1 small{display:block;font-size:22px;-webkit-text-stroke:1.5px var(--ink)}
+.h1zh{font-family:"Noto Serif TC",serif;font-weight:900;font-size:26px;margin:4px 0 10px}
+.lead{color:var(--mute);max-width:640px;margin:0}
+.sparkle{color:var(--pink);font-size:22px}
+
+/* ---------- sticky order bar ---------- */
+.order{position:sticky;top:0;z-index:20;background:rgba(255,247,232,.94);backdrop-filter:blur(6px);border-bottom:2px dashed var(--line);padding:10px 0}
+.order .wrap{display:flex;gap:6px;align-items:stretch}
+.order .lbl{font-family:"VT323",monospace;font-size:18px;writing-mode:horizontal-tb;display:flex;align-items:center;padding-right:4px;color:var(--mute)}
+.order a{flex:1;text-decoration:none;color:var(--ink);border:2px solid var(--ink);border-radius:10px;padding:5px 10px;line-height:1.3;box-shadow:2px 2px 0 var(--ink);transition:transform .1s}
+.order a:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+.order b{font-size:14px;display:block}
+.order i{font-style:normal;font-size:12px;color:var(--mute)}
+
+/* ---------- generic ---------- */
+section{padding:46px 0 10px;scroll-margin-top:70px}
+h2{font-family:"Noto Serif TC",serif;font-weight:900;font-size:25px;margin:0 0 6px;display:flex;align-items:center;gap:10px}
+h2 .num{font-family:"Bungee";font-size:14px;background:var(--ink);color:#ffe27a;border-radius:6px;padding:2px 8px}
+.sub{color:var(--mute);margin:0 0 16px}
+.win{background:var(--paper);border:2px solid var(--ink);border-radius:12px;box-shadow:5px 5px 0 var(--ink);overflow:hidden;margin:14px 0}
+.win .bar{display:flex;align-items:center;gap:8px;padding:6px 12px;border-bottom:2px solid var(--ink);
+  background:linear-gradient(90deg,var(--cyan),#9fe8ff 50%,var(--pink));font-family:"VT323",monospace;font-size:18px}
+.win .bar .dots{margin-left:auto;display:flex;gap:5px}
+.win .bar .dots i{width:12px;height:12px;border:2px solid var(--ink);border-radius:50%;background:#fff;display:block}
+.win .body{padding:16px 18px}
+.tag{display:inline-block;color:#fff;font-weight:900;font-size:12px;padding:1px 9px;border-radius:999px;border:2px solid var(--ink);vertical-align:2px}
+.tA{background:var(--A)} .tB{background:var(--B);color:var(--ink)} .tC{background:var(--C)} .tD{background:var(--D)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:9px 10px;text-align:left;border-bottom:1.5px dashed var(--line);vertical-align:top}
+th{font-size:12px;color:var(--mute);font-weight:700;letter-spacing:.5px}
+td b{font-weight:900}
+
+/* ---------- pizza + allocation ---------- */
+.alloc{display:grid;grid-template-columns:300px 1fr;gap:26px;align-items:center}
+@media(max-width:760px){.alloc{grid-template-columns:1fr}.alloc svg{max-width:280px;margin:0 auto;display:block}}
+.pizza a{cursor:pointer}
+.pizza a:hover path.slice{filter:brightness(1.12)}
+
+/* ---------- receipt (study questions) ---------- */
+.receipt{background:#fff;border:2px solid var(--ink);border-radius:4px;padding:16px 18px;position:relative;font-family:"VT323",monospace;font-size:19px;line-height:1.3;
+  -webkit-mask:radial-gradient(circle 7px at 50% 100%,transparent 98%,#000) 0 0/18px 100% repeat-x;}
+.receipt s{color:#a08a7a}
+.stamp{position:absolute;right:18px;top:26px;transform:rotate(-12deg);font-family:"Bungee";font-size:22px;color:var(--A);border:3px solid var(--A);border-radius:8px;padding:2px 10px;opacity:.85;background:rgba(255,255,255,.7)}
+
+/* ---------- timeline ---------- */
+.tl{position:relative;display:grid;grid-template-columns:repeat(6,1fr);gap:10px;padding-top:34px}
+.tl:before{content:"";position:absolute;left:0;right:0;top:15px;height:6px;border-radius:3px;
+  background:repeating-linear-gradient(90deg,var(--ink) 0 14px,transparent 14px 22px)}
+.tl .ev{position:relative;background:#fff;border:2px solid var(--ink);border-radius:10px;padding:8px 10px;font-size:13px;line-height:1.5}
+.tl .ev:before{content:"";position:absolute;top:-27px;left:14px;width:16px;height:16px;border-radius:50%;border:3px solid var(--ink);background:var(--c,#fff)}
+.tl .yr{font-family:"Bungee";font-size:15px;display:block}
+.tl .gap{display:flex;align-items:center;justify-content:center;font-family:"VT323";font-size:18px;color:var(--mute);text-align:center;border:2px dashed var(--line);border-radius:10px}
+@media(max-width:760px){.tl{grid-template-columns:1fr 1fr}.tl:before{display:none}.tl .ev:before{display:none}}
+
+/* ---------- stat tiles ---------- */
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.stat{background:#fff;border:2px solid var(--ink);border-radius:12px;padding:10px 12px;position:relative}
+.stat .v{font-family:"Bungee";font-size:24px;line-height:1.1}
+.stat .k{font-size:12.5px;color:var(--mute);line-height:1.45;margin-top:4px}
+.stat .who{position:absolute;top:8px;right:8px}
+
+/* ---------- scoreboard ---------- */
+.board td:nth-child(3){white-space:nowrap}
+.res{display:inline-flex;align-items:center;gap:6px;font-weight:900;font-size:13px;border:2px solid var(--ink);border-radius:999px;padding:1px 10px}
+.r-x{background:#ffd6d0}.r-q{background:#fff0c4}.r-turn{background:#d8f4ff}.r-ok{background:#d9f2e2}.r-star{background:#ffe0f1}.r-na{background:#eee}
+
+/* ---------- page segments ---------- */
+.seg{border:2px solid var(--ink);border-radius:16px;background:var(--paper);box-shadow:6px 6px 0 var(--ink);margin:18px 0 8px;overflow:hidden}
+.seg-head{display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:2px solid var(--ink)}
+.seg-head .pg{font-family:"Bungee";font-size:34px;line-height:1;color:#fff;-webkit-text-stroke:1.5px var(--ink)}
+.seg-head h3{margin:0;font-family:"Noto Serif TC",serif;font-weight:900;font-size:21px;line-height:1.3}
+.seg-head .meta{font-size:13px;color:var(--ink);opacity:.8}
+.seg-head .who{margin-left:auto;text-align:right;font-size:13px}
+.seg-head .who .tag{font-size:16px;padding:2px 14px}
+.sA .seg-head{background:var(--A-soft)} .sB .seg-head{background:var(--B-soft)}
+.sC .seg-head{background:var(--C-soft)} .sD .seg-head{background:var(--D-soft)}
+.seg-body{padding:16px 18px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:760px){.seg-body{grid-template-columns:1fr}}
+.know{grid-column:1/-1;background:#fff8d6;border:2px dashed var(--B);border-radius:10px;padding:10px 14px;font-weight:700}
+.know:before{content:"🍕 觀眾要記得：";color:var(--A)}
+.box h4{margin:0 0 6px;font-size:13px;letter-spacing:1px;color:var(--mute);font-family:"VT323",monospace;font-size:19px}
+.box ul{margin:0;padding-left:18px}
+.box li{margin:2px 0}
+.slide{border:2px solid var(--ink);border-radius:8px;background:#fff;aspect-ratio:16/9;padding:10px;font-size:11.5px;line-height:1.35;display:flex;flex-direction:column;gap:6px;position:relative}
+.slide>div:not(.st){flex:1}
+.slide .st{font-weight:900;font-size:13px;border-bottom:2px solid var(--ink);padding-bottom:3px}
+.slide .blk{border:1.5px dashed #b9a68f;border-radius:6px;padding:4px 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--mute)}
+.script{grid-column:1/-1;background:#fff;border-left:5px solid var(--ink);border-radius:6px;padding:10px 14px;font-size:14.5px}
+.script b{font-family:"VT323",monospace;font-size:19px;font-weight:400;color:var(--mute);display:block}
+.hand{grid-column:1/-1;font-size:13.5px;color:var(--mute)}
+.hand:before{content:"➜ 交接給下一位：";font-weight:900;color:var(--ink)}
+
+
+/* ---------- logic flows ---------- */
+.logic h4{margin:0 0 8px}
+.lane{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:6px 0}
+.lane .ln{font-weight:900;font-size:12.5px;min-width:68px}
+.node{border:2px solid var(--ink);border-radius:8px;padding:3px 8px;background:#fff;font-size:12.5px;line-height:1.4;text-align:center}
+.node.bad{background:#ffd6d0}.node.ok{background:#d9f2e2}.node.q{background:#fff0c4}.node.turn{background:#d8f4ff}.node.star{background:#ffe0f1}
+.arr{font-family:"Bungee";font-size:14px;color:var(--mute)}
+.vs{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}
+.vs .mid{font-family:"Bungee";font-size:18px;color:var(--A)}
+.down{text-align:center;font-family:"Bungee";color:var(--mute);margin:2px 0}
+/* ---------- big framework ---------- */
+.frame{display:grid;grid-template-columns:1.5fr 2fr 2fr 1.5fr 1fr;gap:8px}
+.frame .era{grid-row:1;text-align:center;font-family:"Bungee";font-size:13px;border:2px solid var(--ink);border-radius:999px;padding:2px 6px;background:#fff}
+.frame .card{grid-row:2;border:2px solid var(--ink);border-radius:12px;padding:10px;background:#fff;position:relative;font-size:13px;line-height:1.5}
+.frame .card .pg{font-family:"Bungee";font-size:20px}
+.frame .card .t{font-weight:900;font-size:14px;margin:2px 0 4px}
+.frame .card .m{position:absolute;top:8px;right:8px}
+.frame .card:not(.last):after{content:"▶";position:absolute;right:-13px;top:44%;font-size:14px;color:var(--ink);z-index:2}
+.frame .qline{grid-column:1/-1;grid-row:3;text-align:center;border:2px dashed var(--A);border-radius:12px;padding:8px;background:#fff8d6;font-weight:900}
+@media(max-width:760px){.frame{grid-template-columns:1fr}.frame .era,.frame .card,.frame .qline{grid-row:auto}.frame .card:after{display:none}}
+/* ---------- checklist ---------- */
+.check{list-style:none;padding:0;margin:0}
+.check li{padding:7px 0 7px 32px;position:relative;border-bottom:1.5px dashed var(--line)}
+.check li:before{content:"";position:absolute;left:0;top:10px;width:18px;height:18px;border:2px solid var(--ink);border-radius:4px;background:#fff}
+footer{margin-top:50px}
+footer .wrap{padding:22px 20px 40px;font-size:13px;color:var(--mute)}
+</style>
+</head>
+<body>
+
+<div class="checker"></div>
+<div class="ticker"><span>★ HOT &amp; FRESH ★ SAME-DAY DELIVERY ★ 30 MIN OR IT'S FREE? ★ AMAZON ★ WALMART ★ eBAY ★ INSTACART ★ THE ICONIC ★ 7-ELEVEN JAPAN ★ URBANFETCH ★ KOZMO ★ ORDER UP! ★ HOT &amp; FRESH ★ SAME-DAY DELIVERY ★ 30 MIN OR IT'S FREE? ★ AMAZON ★ WALMART ★ eBAY ★ INSTACART ★ THE ICONIC ★ 7-ELEVEN JAPAN ★ URBANFETCH ★ KOZMO ★ ORDER UP! ★&nbsp;</span></div>
+
+<header class="wrap">
+  <span class="pill">清大科管所｜供應鏈管理｜個案介紹 🍕</span>
+  <h1>SAME-DAY<br>DELIVERY<small>SAME AS THE PAST? <span class="sparkle">✦</span></small></h1>
+  <div class="h1zh">當日配送個案：四人分工</div>
+  <p class="lead">這次只要<b>介紹個案</b>，不用回答 Study Questions。一共 5 頁投影片、4 個人講，大約一人一頁。目標 <b>8 分鐘講完</b>，留 2 分鐘緩衝，不超過 10 分鐘。上面那條「出餐順序」就是報告順序，長度代表時間，點一下可以跳到那一段，往下捲的時候會一直固定在畫面上。</p>
+</header>
+
+<nav class="order">
+  <div class="wrap">
+    <span class="lbl">ORDER▸</span>
+    <a href="#p1" style="flex:1.5;background:var(--A-soft)"><b>P1 背景與歷史</b><i>A・1.5 分</i></a>
+    <a href="#p2" style="flex:2;background:var(--B-soft)"><b>P2 Amazon・Walmart</b><i>B・2 分</i></a>
+    <a href="#p3" style="flex:2;background:var(--C-soft)"><b>P3 eBay・Instacart</b><i>C・2 分</i></a>
+    <a href="#p4" style="flex:1.5;background:var(--D-soft)"><b>P4 國際案例</b><i>D・1.5 分</i></a>
+    <a href="#p5" style="flex:1;background:var(--A-soft)"><b>P5 看法</b><i>A・1 分</i></a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<section id="frame">
+  <h2><span class="num">00</span>整份報告的框架</h2>
+  <p class="sub">一條故事線：過去失敗 → 現在大家怎麼做（美國、國外）→ 看法分歧 → 回到標題的問號。</p>
+  <div class="frame">
+    <div class="era">過去</div>
+    <div class="era" style="grid-column:2/4">現在・美國</div>
+    <div class="era">現在・國外</div>
+    <div class="era">未來？</div>
+    <div class="card" style="background:var(--A-soft)"><span class="m tag tA">A</span><div class="pg">P1</div><div class="t">背景與歷史</div>披薩成功；Urbanfetch、Kozmo 失敗；2012 再起</div>
+    <div class="card" style="background:var(--B-soft)"><span class="m tag tB">B</span><div class="pg">P2</div><div class="t">自有庫存</div>Amazon 送到家<br>Walmart 轉向門市取貨</div>
+    <div class="card" style="background:var(--C-soft)"><span class="m tag tC">C</span><div class="pg">P3</div><div class="t">非自有庫存</div>eBay 代買代送（收掉）<br>Instacart 平台（獲利）</div>
+    <div class="card" style="background:var(--D-soft)"><span class="m tag tD">D</span><div class="pg">P4</div><div class="t">縮小範圍</div>The Iconic 限區域<br>7-Meal 限客群</div>
+    <div class="card last" style="background:var(--A-soft)"><span class="m tag tA">A</span><div class="pg">P5</div><div class="t">看法分歧</div>看好 vs 懷疑<br>總覽表</div>
+    <div class="qline">貫穿全場的問題：當日配送的未來，會不會跟過去一樣？（只提出，不回答）</div>
+  </div>
+</section>
+
+<!-- ============ 分工 ============ -->
+<section id="alloc">
+  <h2><span class="num">01</span>一個披薩切五片</h2>
+  <p class="sub">顏色代表負責人，數字是投影片頁碼。點披薩也可以跳到那一頁。</p>
+  <div class="alloc">
+    <svg class="pizza" id="pizza" viewBox="-160 -160 320 320" aria-label="五頁分工披薩圖"></svg>
+    <div class="win">
+      <div class="bar">ORDER_TICKET.exe<span class="dots"><i></i><i></i><i></i></span></div>
+      <div class="body" style="padding:6px 14px">
+        <table>
+          <tr><th>組員</th><th>頁數</th><th>負責內容</th><th>時間</th></tr>
+          <tr><td><span class="tag tA">A</span></td><td>P1・P5</td><td>開場（披薩 vs. 失敗史）＋結尾（各方看法、總覽表）</td><td>1.5＋1 分</td></tr>
+          <tr><td><span class="tag tB">B</span></td><td>P2</td><td>Amazon、Walmart：兩大零售巨頭</td><td>2 分</td></tr>
+          <tr><td><span class="tag tC">C</span></td><td>P3</td><td>eBay、Instacart：不靠自己庫存的模式</td><td>2 分</td></tr>
+          <tr><td><span class="tag tD">D</span></td><td>P4</td><td>The Iconic、Seven-Eleven Japan：國際案例</td><td>1.5 分</td></tr>
+        </table>
+        <p style="font-size:13px;color:var(--mute);margin:8px 0 4px">A 開場和結尾都講，可以讓報告頭尾呼應個案標題「Same as the Past?」。如果 A 覺得太多，P5 的總覽表可以交給 D。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Study questions skip ============ -->
+<section id="skip">
+  <h2><span class="num">02</span>這次不用做的事</h2>
+  <p class="sub">課本最後的三題 Study Questions 這次<b>不用回答</b>，所以投影片只要描述個案、不要下結論或比較誰比較好。</p>
+  <div class="receipt">
+    <div class="stamp">SKIP!</div>
+    STUDY QUESTIONS ...................<br>
+    <s>1. 為什麼披薩當日配送成功，Kozmo 卻失敗？</s><br>
+    <s>2. 什麼條件下當日配送可以做到低成本？</s><br>
+    <s>3. 哪種企業能成功？Amazon、Walmart、Instacart 誰會贏？</s><br>
+    ...................................<br>
+    TOTAL: 只介紹個案 ✔
+  </div>
+</section>
+
+<!-- ============ Timeline ============ -->
+<section id="timeline">
+  <h2><span class="num">03</span>個案時間軸</h2>
+  <p class="sub">整份個案的時間線，大家講的時候可以對照，避免年份講錯。點的顏色是負責人。</p>
+  <div class="tl">
+    <div class="ev" style="--c:var(--A)"><span class="yr">1990s末</span>網路泡沫時期，Urbanfetch、Kozmo 投入當日配送</div>
+    <div class="ev" style="--c:var(--A)"><span class="yr">2000–01</span>Urbanfetch 2000 秋倒閉；Kozmo 2001 初倒閉</div>
+    <div class="gap">〜 十年 〜<br>沉寂期</div>
+    <div class="ev" style="--c:var(--B)"><span class="yr">2012</span>Amazon、Walmart、eBay 大舉投入；Walmart 在數個城市試辦</div>
+    <div class="ev" style="--c:var(--C)"><span class="yr">2015</span>eBay 收掉 eBay Now</div>
+    <div class="ev" style="--c:var(--B)"><span class="yr">2017</span>Amazon 涵蓋 5,000+ 城市；Walmart 轉向門市取貨；Instacart 開始獲利</div>
+  </div>
+</section>
+
+<!-- ============ Stats ============ -->
+<section id="stats">
+  <h2><span class="num">04</span>個案裡的關鍵數字</h2>
+  <p class="sub">投影片上可以直接放大這些數字，右上角是負責講的人。</p>
+  <div class="stats">
+    <div class="stat"><span class="who tag tA">A</span><div class="v">$280M+</div><div class="k">Kozmo 募到的資金，還是在 2001 倒閉</div></div>
+    <div class="stat"><span class="who tag tA">A</span><div class="v">11</div><div class="k">Kozmo 營運的城市數</div></div>
+    <div class="stat"><span class="who tag tB">B</span><div class="v">5,000+</div><div class="k">2017 年 Amazon Prime 當日到貨涵蓋的城市</div></div>
+    <div class="stat"><span class="who tag tB">B</span><div class="v">$35</div><div class="k">Amazon 當日到貨的訂單門檻，品項上百萬</div></div>
+    <div class="stat"><span class="who tag tB">B</span><div class="v">2012</div><div class="k">Walmart 開始在北維吉尼亞、費城、舊金山等城市試辦</div></div>
+    <div class="stat"><span class="who tag tC">C</span><div class="v">1 hr</div><div class="k">eBay 從下單到送達的時間</div></div>
+    <div class="stat"><span class="who tag tC">C</span><div class="v">50</div><div class="k">eBay 在舊金山的快遞員人數</div></div>
+    <div class="stat"><span class="who tag tC">C</span><div class="v">$3B+</div><div class="k">Instacart 的估值</div></div>
+    <div class="stat"><span class="who tag tC">C</span><div class="v">100+</div><div class="k">Instacart 合作的生鮮零售商</div></div>
+    <div class="stat"><span class="who tag tD">D</span><div class="v">3 hr</div><div class="k">The Iconic 雪梨市區到貨時間</div></div>
+    <div class="stat"><span class="who tag tD">D</span><div class="v">$9.95</div><div class="k">The Iconic 3 小時到貨的運費</div></div>
+    <div class="stat"><span class="who tag tD">D</span><div class="v">7–18</div><div class="k">The Iconic 服務時段（營業日 7:00–18:00）</div></div>
+  </div>
+</section>
+
+<!-- ============ Pages ============ -->
+<section id="pages">
+  <h2><span class="num">05</span>五頁內容：每頁怎麼做、怎麼講</h2>
+  <p class="sub">每段都有：觀眾要記得的一句話、要講的內容、這一頁的邏輯脈絡圖、講稿參考，還有交接給下一位的那句話。</p>
+
+  <!-- P1 -->
+  <div class="seg sA" id="p1">
+    <div class="seg-head" style="scroll-margin-top:80px">
+      <span class="pg" style="color:var(--A)">P1</span>
+      <div><h3>開場：個案背景與歷史</h3><div class="meta">約 1.5 分鐘｜披薩成功了幾十年，其他當日配送卻大多失敗</div></div>
+      <div class="who"><span class="tag tA">A</span></div>
+    </div>
+    <div class="seg-body">
+      <div class="know">當日配送不是新點子：以前試過，除了披薩幾乎都失敗；2012 年又有一批大公司重新投入。</div>
+      <div class="box">
+        <h4>// 要講的內容</h4>
+        <ul>
+          <li>美國的披薩外送已經成功幾十年，但其他當日配送大多失敗</li>
+          <li><b>Urbanfetch</b>：在倫敦、曼哈頓、布魯克林等人口密集區營運，2000 年秋天因為資金不足倒閉</li>
+          <li><b>Kozmo</b>：募資超過 2.8 億美元、在 11 個城市營運，2001 年初倒閉</li>
+          <li><b>2012 年左右戰火重燃</b>：Amazon、Walmart、eBay 大舉投入，Instacart 等新玩家也加入</li>
+        </ul>
+      </div>
+      <div class="box logic">
+        <h4>// 邏輯脈絡</h4>
+        <div class="vs">
+          <div class="node ok">🍕 披薩外送<br>成功數十年</div><div class="mid">VS</div>
+          <div class="node bad">其他當日配送<br>Urbanfetch 2000 ✕<br>Kozmo 2001 ✕</div>
+        </div>
+        <div class="down">▼</div>
+        <div class="lane" style="justify-content:center"><div class="node q">2012 年再起：Amazon・Walmart・eBay・Instacart</div></div>
+        <div class="down">▼</div>
+        <div class="lane" style="justify-content:center"><div class="node">這一次會不一樣嗎？➜ 帶出 P2–P4</div></div>
+      </div>
+      <div class="script"><b>// 講稿參考</b>
+        大家應該都叫過披薩外送，在美國它已經成功好幾十年了。可是除了披薩，其他當日配送幾乎都失敗。像 1990 年代末網路泡沫的時候，Urbanfetch 在倫敦和紐約做，2000 年就因為沒錢倒了；Kozmo 募了超過 2.8 億美元、開了 11 個城市，2001 年也收掉了。結果到 2012 年左右，Amazon、Walmart、eBay 又重新開打，還多了 Instacart 這種新玩家。
+      </div>
+      <div class="hand">「那這一次的新玩家是怎麼做的？先從最大的兩家零售商 Amazon 和 Walmart 開始，交給 B。」</div>
+    </div>
+  </div>
+
+  <!-- P2 -->
+  <div class="seg sB" id="p2">
+    <div class="seg-head">
+      <span class="pg" style="color:var(--B)">P2</span>
+      <div><h3>Amazon 與 Walmart</h3><div class="meta">約 2 分鐘｜兩大零售巨頭，走了不一樣的路</div></div>
+      <div class="who"><span class="tag tB">B</span></div>
+    </div>
+    <div class="seg-body">
+      <div class="know">Amazon 全力衝「送到家」，規模很大但獲利不明；Walmart 試過送到家之後，轉向「門市取貨」。</div>
+      <div class="box">
+        <h4>// 要講的內容</h4>
+        <ul>
+          <li><b>Amazon</b>：2017 年宣稱在超過 5,000 個城市，為 Prime 會員提供上百萬品項的當日到貨（訂單需滿 $35）</li>
+          <li>不清楚這樣做有沒有賺錢；有評論認為，只要成本壓得夠低，就會重創實體零售</li>
+          <li><b>Walmart</b>：2012 年回應 Amazon，在北維吉尼亞、費城、明尼亞波利斯、聖荷西、舊金山試辦當日配送</li>
+          <li>到 2017 年改成主打「門市免費當日取貨＋免費兩日到貨」</li>
+        </ul>
+      </div>
+      <div class="box logic">
+        <h4>// 邏輯脈絡：同樣是自有庫存，走向不同</h4>
+        <div class="lane"><span class="ln" style="color:#a87400">Amazon</span>
+          <div class="node">自有庫存</div><span class="arr">→</span><div class="node">送到家<br>5,000+ 城・滿 $35</div><span class="arr">→</span><div class="node q">獲利？<br>威脅實體零售</div></div>
+        <div class="lane"><span class="ln" style="color:#a87400">Walmart</span>
+          <div class="node">2012 試辦<br>送到家</div><span class="arr">→</span><div class="node turn">2017 轉向<br>門市取貨＋2 日到貨</div></div>
+      </div>
+      <div class="script"><b>// 講稿參考</b>
+        先看 Amazon。到 2017 年，它說在超過 5,000 個城市，Prime 會員訂單滿 35 美元，就有上百萬種商品可以當天送到。但它到底有沒有賺錢，外界其實不清楚。有人認為，如果 Amazon 真的能把成本壓低，實體零售店會很慘。Walmart 在 2012 年跟進，在舊金山、費城等幾個城市試辦，可是到了 2017 年，它的重點變成「到門市免費當天取貨」，再加上免費兩天到貨。
+      </div>
+      <div class="hand">「這兩家都是賣自己的庫存。接下來兩家不太一樣，商品不一定是自己的，交給 C。」</div>
+    </div>
+  </div>
+
+  <!-- P3 -->
+  <div class="seg sC" id="p3">
+    <div class="seg-head">
+      <span class="pg" style="color:var(--C)">P3</span>
+      <div><h3>eBay 與 Instacart</h3><div class="meta">約 2 分鐘｜不靠自有庫存的兩種模式</div></div>
+      <div class="who"><span class="tag tC">C</span></div>
+    </div>
+    <div class="seg-body">
+      <div class="know">eBay 的「代買代送」做了幾年就收掉；Instacart 用平台跟零售商合作，擴張很快，但很晚才開始賺錢。</div>
+      <div class="box">
+        <h4>// 要講的內容</h4>
+        <ul>
+          <li><b>eBay</b>：配送的商品不一定是自己的庫存，例如派快遞員到 Macy's 買，再在一小時內送到顧客手上</li>
+          <li>在舊金山有 50 名快遞員；2015 年關掉 eBay Now，代表這門生意大概很難獲利</li>
+          <li><b>Instacart</b>：總部在舊金山，估值超過 30 億美元，由員工替顧客採買生鮮再送到家</li>
+          <li>涵蓋美國大部分主要城市，和 Whole Foods、Costco 等百多家零售商合作，幫它們在配送上對抗 Amazon</li>
+          <li>成長很快，但到 2017 年才開始獲利</li>
+        </ul>
+      </div>
+      <div class="box logic">
+        <h4>// 邏輯脈絡：商品不是自己的</h4>
+        <div class="lane"><span class="ln" style="color:var(--C)">eBay</span>
+          <div class="node">顧客下單</div><span class="arr">→</span><div class="node">快遞員去<br>Macy's 買</div><span class="arr">→</span><div class="node">1 小時送到</div><span class="arr">→</span><div class="node bad">2015 收掉</div></div>
+        <div class="lane"><span class="ln" style="color:var(--C)">Instacart</span>
+          <div class="node">顧客下單</div><span class="arr">→</span><div class="node">採買員去<br>合作超市買</div><span class="arr">→</span><div class="node">送到家</div><span class="arr">→</span><div class="node ok">2017 獲利</div></div>
+      </div>
+      <div class="script"><b>// 講稿參考</b>
+        eBay 的做法很特別：它送的東西不一定是自己倉庫裡的。《華爾街日報》報導過，有顧客下單之後，eBay 派快遞員去 Macy's 買，一小時內就送到。它在舊金山有 50 個快遞員，但 2015 年就把 eBay Now 收掉了，看起來很難賺錢。Instacart 則是請員工幫你去超市買菜再送到家，跟 Whole Foods、Costco 等一百多家零售商合作，估值超過 30 億美元。它長得很快，不過到 2017 年才第一次賺錢。
+      </div>
+      <div class="hand">「以上都是美國的例子，其他國家其實也有人在做，交給 D。」</div>
+    </div>
+  </div>
+
+  <!-- P4 -->
+  <div class="seg sD" id="p4">
+    <div class="seg-head">
+      <span class="pg" style="color:var(--D)">P4</span>
+      <div><h3>國際案例：澳洲與日本</h3><div class="meta">約 1.5 分鐘｜限定區域、特定客群的做法</div></div>
+      <div class="who"><span class="tag tD">D</span></div>
+    </div>
+    <div class="seg-body">
+      <div class="know">在美國以外，也有把範圍或客群縮小的當日配送，而且反應不錯。</div>
+      <div class="box">
+        <h4>// 要講的內容</h4>
+        <ul>
+          <li><b>The Iconic</b>（澳洲，賣服飾、鞋子、配件）：雪梨市區 3 小時內完成揀貨、包裝、送達，運費 $9.95</li>
+          <li>只在營業日早上 7 點到晚上 6 點；公司雖然年輕，這項服務很受歡迎</li>
+          <li><b>Seven-Eleven Japan 的 7-Meal</b>：鎖定日本高齡人口，提供高品質餐點</li>
+          <li>顧客可以到 7-Eleven 門市取餐，也可以送到家裡或辦公室</li>
+        </ul>
+      </div>
+      <div class="box logic">
+        <h4>// 邏輯脈絡：把範圍縮小</h4>
+        <div class="lane"><span class="ln" style="color:var(--D)">The Iconic</span>
+          <div class="node">限區域<br>雪梨市區</div><span class="arr">+</span><div class="node">限時段<br>營業日 7–18 點</div><span class="arr">+</span><div class="node">收費<br>$9.95</div><span class="arr">→</span><div class="node star">很受歡迎</div></div>
+        <div class="lane"><span class="ln" style="color:var(--D)">7-Meal</span>
+          <div class="node">限客群<br>高齡人口</div><span class="arr">+</span><div class="node">門市取 or<br>送到家／辦公室</div></div>
+      </div>
+      <div class="script"><b>// 講稿參考</b>
+        先看澳洲的 The Iconic，它賣衣服、鞋子和配件。在雪梨市區，只要付 9.95 澳幣，3 小時內就會幫你揀貨、包裝、送到，不過只限營業日早上 7 點到晚上 6 點。公司很年輕，但這個服務很受歡迎。日本的 7-Eleven 則有一個 7-Meal 服務，主要是針對高齡人口，提供比較高品質的餐點，可以到門市拿，也可以送到家裡或公司。
+      </div>
+      <div class="hand">「看完這麼多家，大家對當日配送到底怎麼看？最後交回給 A。」</div>
+    </div>
+  </div>
+
+  <!-- P5 -->
+  <div class="seg sA" id="p5">
+    <div class="seg-head">
+      <span class="pg" style="color:var(--A)">P5</span>
+      <div><h3>各方看法與總覽</h3><div class="meta">約 1 分鐘｜看好 vs. 懷疑，加上一張總覽表收尾</div></div>
+      <div class="who"><span class="tag tA">A</span></div>
+    </div>
+    <div class="seg-body">
+      <div class="know">對當日配送能不能成功，看法非常分歧；每家走的模式也都不一樣。</div>
+      <div class="box">
+        <h4>// 要講的內容</h4>
+        <ul>
+          <li><b>看好</b>：有評論認為 Amazon 這一步會撼動整個零售業</li>
+          <li><b>懷疑</b>：《紐約時報》提到，有些零售分析師懷疑花這麼多成本和力氣做當日配送，到底值不值得</li>
+          <li>用「各家模式總覽表」（見下一段）快速收尾，只描述、不排名</li>
+        </ul>
+      </div>
+      <div class="box logic">
+        <h4>// 邏輯脈絡：回到標題的問號</h4>
+        <div class="vs">
+          <div class="node ok">👍 會撼動<br>整個零售業</div><div class="mid">VS</div>
+          <div class="node q">🤔 成本和難度<br>值得嗎？（NYT）</div>
+        </div>
+        <div class="down">▼</div>
+        <div class="lane" style="justify-content:center"><div class="node">各家模式總覽表</div></div>
+        <div class="down">▼</div>
+        <div class="lane" style="justify-content:center"><div class="node q" style="font-weight:900">Same as the Past？留給觀眾</div></div>
+      </div>
+      <div class="script"><b>// 講稿參考</b>
+        最後，大家對當日配送的看法其實很兩極。有人認為 Amazon 這樣做會撼動整個零售業；但《紐約時報》也提到，有些分析師懷疑花這麼多錢和力氣做當日配送到底值不值得。我們把今天講的幾家整理成這張表：有的倒了、有的收掉、有的轉向，也有的開始賺錢。個案的標題問「未來會不會跟過去一樣？」，這就留給大家想想。我們的報告到這裡，謝謝大家。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ model overview ============ -->
+<section id="overview">
+  <h2><span class="num">06</span>各家模式總覽（P5 用）</h2>
+  <p class="sub">把個案裡每家公司放在同一張表裡。A 可以直接截這張放在 P5，其他人也可以拿來對照自己那頁的用詞。</p>
+  <div class="win">
+    <div class="bar">MENU_BOARD.html<span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="body" style="padding:4px 12px;overflow-x:auto">
+      <table class="board">
+        <tr><th>公司</th><th>賣誰的東西</th><th>怎麼交到顧客手上</th><th>範圍／速度</th><th>個案中的結果</th></tr>
+        <tr><td><span class="tag tA">A</span> <b>Urbanfetch</b></td><td>—</td><td>城市當日配送</td><td>倫敦、曼哈頓、布魯克林</td><td><span class="res r-x">✕ 2000 倒閉</span></td></tr>
+        <tr><td><span class="tag tA">A</span> <b>Kozmo</b></td><td>—</td><td>城市當日配送</td><td>11 個城市</td><td><span class="res r-x">✕ 2001 倒閉</span></td></tr>
+        <tr><td><span class="tag tB">B</span> <b>Amazon</b></td><td>自己的庫存</td><td>送到家</td><td>5,000+ 城市，當日（Prime、滿 $35）</td><td><span class="res r-q">？ 獲利不明</span></td></tr>
+        <tr><td><span class="tag tB">B</span> <b>Walmart</b></td><td>自己的庫存</td><td>門市當日取貨＋2 日宅配</td><td>2012 在數個城市試辦</td><td><span class="res r-turn">↺ 轉向門市取貨</span></td></tr>
+        <tr><td><span class="tag tC">C</span> <b>eBay Now</b></td><td>別家店（如 Macy's）</td><td>快遞員代買後送到家</td><td>舊金山等，1 小時</td><td><span class="res r-x">✕ 2015 收掉</span></td></tr>
+        <tr><td><span class="tag tC">C</span> <b>Instacart</b></td><td>合作零售商（Whole Foods、Costco…）</td><td>員工代買後送到家</td><td>美國大部分主要城市</td><td><span class="res r-ok">✓ 2017 開始獲利</span></td></tr>
+        <tr><td><span class="tag tD">D</span> <b>The Iconic</b></td><td>自己的商品</td><td>送到家</td><td>雪梨市區，3 小時</td><td><span class="res r-star">★ 很受歡迎</span></td></tr>
+        <tr><td><span class="tag tD">D</span> <b>7-Eleven 7-Meal</b></td><td>自己的餐點</td><td>門市取 or 送到家／辦公室</td><td>日本，鎖定高齡人口</td><td><span class="res r-na">— 個案未提</span></td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ checklist ============ -->
+<section id="todo">
+  <h2><span class="num">07</span>準備清單</h2>
+  <p class="sub">每個人做完自己那頁之後，對一下這幾點。</p>
+  <div class="win">
+    <div class="bar">TODO.txt<span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="body">
+      <ul class="check">
+                <li><b>全員</b>：只描述個案，不要回答 Study Questions，也不要比較誰比較好</li>
+        <li><b>全員</b>：數字、年份照上面的「關鍵數字」和「時間軸」，避免各講各的</li>
+        <li><b>全員</b>：講稿最後一句用「交接給下一位」那句，讓報告接得順</li>
+        <li><span class="tag tA">A</span> 負責封面（個案標題＋組員），P5 放總覽表</li>
+        <li><span class="tag tB">B</span> <span class="tag tC">C</span> <span class="tag tD">D</span> 各自做好一頁後丟到共用簡報，給 A 統一順過一次</li>
+        <li><b>全員</b>：上台前一起順一次，總時間控制在 8–10 分鐘內</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="checker"></div>
+  <div class="wrap">資料來源：課本 Case Study〈The Future of Same-Day Delivery: Same as the Past?〉。內容只整理個案本身，未加入外部資料。🍕</div>
+</footer>
+
+<script>
+(function(){
+  const svg=document.getElementById('pizza'), NS='http://www.w3.org/2000/svg';
+  const slices=[
+    {p:'P1',who:'A',c:'#e8432f'},{p:'P2',who:'B',c:'#f2a900'},
+    {p:'P3',who:'C',c:'#2f9e5a'},{p:'P4',who:'D',c:'#7b5cf0'},{p:'P5',who:'A',c:'#e8432f'}];
+  const R=138, r=118, n=slices.length;
+  const el=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e};
+  svg.appendChild(el('circle',{r:R+12,fill:'#d99a4e',stroke:'#2b1a12','stroke-width':3}));
+  slices.forEach((s,i)=>{
+    const a0=(i/n)*2*Math.PI-Math.PI/2, a1=((i+1)/n)*2*Math.PI-Math.PI/2;
+    const g=el('a',{href:'#'+s.p.toLowerCase()});
+    const d=`M0 0 L${R*Math.cos(a0)} ${R*Math.sin(a0)} A${R} ${R} 0 0 1 ${R*Math.cos(a1)} ${R*Math.sin(a1)} Z`;
+    g.appendChild(el('path',{d,class:'slice',fill:s.c,stroke:'#fff7e8','stroke-width':5}));
+    const m=(a0+a1)/2;
+    [[.88,-.38],[.86,.36],[.28,0]].forEach(([k,o])=>{
+      g.appendChild(el('circle',{cx:r*k*Math.cos(m+o),cy:r*k*Math.sin(m+o),r:7,fill:'#b3200f',opacity:.55}));
+    });
+    const tx=r*.55*Math.cos(m), ty=r*.55*Math.sin(m);
+    const t1=el('text',{x:tx,y:ty-2,'text-anchor':'middle','font-family':'Bungee','font-size':22,fill:'#fff',stroke:'#2b1a12','stroke-width':1.2});
+    t1.textContent=s.p; g.appendChild(t1);
+    const t2=el('text',{x:tx,y:ty+20,'text-anchor':'middle','font-family':'Bungee','font-size':15,fill:'#2b1a12'});
+    t2.textContent=s.who; g.appendChild(t2);
+    svg.appendChild(g);
+  });
+  svg.appendChild(el('circle',{r:R+12,fill:'none',stroke:'#2b1a12','stroke-width':3}));
+})();
+</script>
+</body>
+</html>
